@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const FacultyRegistration = () => {
     const [step, setStep] = useState(1);
@@ -115,6 +116,11 @@ const FacultyRegistration = () => {
                     </div>
                 </div>
             )}
+            <p className='text-white'>
+                <Link to='/auth/login' className={`hover:text-blue-500`}>
+                    Back
+                </Link>
+            </p>
         </div>
     );
 };

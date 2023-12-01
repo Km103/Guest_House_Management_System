@@ -8,7 +8,7 @@ const EntryQuestions = () => {
     const handleNext = () => {};
 
     return (
-        <div className='bg-gray-900 flex flex-col w-max roundex-md gap-4 text-white p-4'>
+        <div className='bg-gray-900 flex flex-col border-gray-300 w-max roundex-md gap-4 text-white p-4'>
             <h3 class=' font-semibold text-2xl text-gray-900 dark:text-white'>
                 You are/belong to
             </h3>
@@ -88,6 +88,12 @@ const EntryQuestions = () => {
                     Next
                 </button>
             </Link>
+            <p className='text-white'>
+                Already registered ?
+                <Link to='/auth/login' className={`hover:text-blue-500`}>
+                    Login
+                </Link>
+            </p>
         </div>
     );
 };
