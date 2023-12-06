@@ -1,13 +1,27 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const FacultyRegistration = () => {
+    const navigate = useNavigate();
+
     const [step, setStep] = useState(1);
     const [facultyName, setFacultyName] = useState("");
     const [facultyEmail, setFacultyEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [reenterPassword, setReenterPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const facultyEmailRegex = /^[a-zA-Z0-9._%+-]+@lnmiit\.ac\.in$/i;
+    const facultyEmailRegexMatch = facultyEmail.match(facultyEmailRegex);
+
+    const userNameRegex = /^[a-z0-9]{4,10}$/i;
+    const userNameRegexMatch = username.match(userNameRegex);
+
+    const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i;
+    const passwordRegexMatch = password.match(passwordRegex);
 
     const handleNextStep = () => {
         setStep(step + 1);
@@ -17,12 +31,39 @@ const FacultyRegistration = () => {
         setStep(step - 1);
     };
 
-    const handleRegister = () => {
+    const handleRegister = async (event) => {
+        event.preventDefault();
         // Perform registration logic here
+        const { data } = await fetch(
+            "https://isdl-api.onrender.com/api/register/user/faculty/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: username,
+                    facultyName,
+                    facultyEmail,
+                    password,
+                }),
+            }
+        );
+
+        const { status } = data;
+
+        if (status === 404 || status === 403) {
+            setError("Something's wrong");
+        } else if (status === 200) {
+            navigate("/dashboard");
+        }
     };
 
     return (
-        <div className='flex flex-col items-center justify-center h-screen bg-gray-900'>
+        <form
+            onSubmit={handleRegister}
+            className='flex flex-col items-center justify-center h-screen bg-gray-900'
+        >
             {step === 1 && (
                 <div className='flex flex-col items-center bg-gray-800 p-8 rounded-lg'>
                     <h2 className='text-2xl font-bold text-white mb-4'>
@@ -42,11 +83,20 @@ const FacultyRegistration = () => {
                         onChange={(e) => setFacultyEmail(e.target.value)}
                         className='bg-gray-700 text-white px-4 py-2 rounded-lg mb-4'
                     />
+                    {facultyEmail.length && !facultyEmailRegexMatch ? (
+                        <div className={`text-red-500 mb-2`}>
+                            Not a valid LNMIIT email
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                     <button
                         onClick={handleNextStep}
                         disabled={!facultyName || !facultyEmail}
                         className={`bg-blue-500 text-white px-4 py-2 rounded-lg ${
-                            (!facultyEmail || !facultyName) &&
+                            (!facultyEmail ||
+                                !facultyName ||
+                                !facultyEmailRegexMatch) &&
                             "opacity-50 cursor-not-allowed"
                         }`}
                     >
@@ -81,6 +131,14 @@ const FacultyRegistration = () => {
                         onChange={(e) => setReenterPassword(e.target.value)}
                         className='bg-gray-700 text-white px-4 py-2 rounded-lg mb-4'
                     />
+                    {password.length && !passwordRegexMatch ? (
+                        <div className={`text-red-500 mb-2 w-80 text-center`}>
+                            Password must contain at least 8 characters, one
+                            letter, one number and one special character
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                     {password &&
                         reenterPassword &&
                         password !== reenterPassword && (
@@ -88,6 +146,19 @@ const FacultyRegistration = () => {
                                 Passwords do not match
                             </div>
                         )}
+                    {username.length && !userNameRegexMatch ? (
+                        <div className={`text-red-500 mb-2 w-80 text-center`}>
+                            Username can contain only a-z, 0-9, and no special
+                            characters
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {error.length > 0 && (
+                        <div className={`w-80 text-red-400 text-center`}>
+                            {error}
+                        </div>
+                    )}
                     <div
                         className={`flex flex-col justify-center items-center gap-4`}
                     >
@@ -99,15 +170,18 @@ const FacultyRegistration = () => {
                         </button>
                         <button
                             onClick={handleRegister}
+                            type='submit'
                             disabled={
                                 !username ||
                                 !password ||
-                                password !== reenterPassword
+                                password !== reenterPassword ||
+                                !userNameRegexMatch
                             }
                             className={`bg-green-500 text-white px-4 py-2 rounded-lg ${
                                 (!username ||
                                     !password ||
-                                    password !== reenterPassword) &&
+                                    password !== reenterPassword ||
+                                    !userNameRegexMatch) &&
                                 "opacity-50 cursor-not-allowed"
                             }`}
                         >
@@ -116,12 +190,13 @@ const FacultyRegistration = () => {
                     </div>
                 </div>
             )}
-            <p className='text-white'>
-                <Link to='/auth/login' className={`hover:text-blue-500`}>
-                    Back
-                </Link>
-            </p>
-        </div>
+            <Link
+                to='/'
+                className='text-white text-center h-12 bg-blue-600 flex items-center w-full rounded-lg justify-center hover:bg-transparent text-xl hover:border-2 hover:border-blue-600 hover:cursor-pointer hover:text-blue-500'
+            >
+                Back to home
+            </Link>
+        </form>
     );
 };
 

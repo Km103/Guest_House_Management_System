@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 
 const EntryQuestions = () => {
     const [selectedOption, setSelectedOption] = useState("");
@@ -73,6 +73,27 @@ const EntryQuestions = () => {
                             class='w-full py-3 ms-2 cursor-pointer text-lg font-medium text-gray-900 dark:text-gray-300'
                         >
                             TPCRC
+                        </label>
+                    </div>
+                </li>
+                <li class='w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600'>
+                    <div class='flex items-center ps-3'>
+                        <input
+                            id='list-radio-military'
+                            type='radio'
+                            value=''
+                            name='list-radio'
+                            onClick={() => {
+                                setSelectedOption("admin");
+                                setNextButtonEnabled(true);
+                            }}
+                            class='w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                        />
+                        <label
+                            for='list-radio-military'
+                            class='w-full py-3 ms-2 cursor-pointer text-lg font-medium text-gray-900 dark:text-gray-300'
+                        >
+                            Administrator
                         </label>
                     </div>
                 </li>

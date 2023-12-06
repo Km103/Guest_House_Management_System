@@ -28,6 +28,10 @@ const router = createBrowserRouter([
         element: <LoginForm />,
     },
     {
+        path: "/auth/register/admin",
+        element: <LoginForm />,
+    },
+    {
         path: "/auth/login",
         element: <LoginForm />,
     },

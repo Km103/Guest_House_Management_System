@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
+    const [error, setError] = useState("");
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
@@ -20,9 +23,31 @@ const LoginForm = () => {
         setIsFormValid(username !== "" && password !== "");
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle login logic here
+        const { data } = await fetch(
+            "https://isdl-api.onrender.com/api/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
+            }
+        );
+
+        const { status } = data;
+        if (status === 404 || status === 403) {
+            setError("Invalid username or password");
+            setUsername("");
+            setPassword("");
+        } else if (status === 200) {
+            navigate("/dashboard");
+        }
     };
 
     return (
@@ -65,6 +90,12 @@ const LoginForm = () => {
                         Login
                     </button>
                 </Link>
+                {error.length > 0 && (
+                    <div className={`w-80 text-red-400 text-center`}>
+                        {error}
+                    </div>
+                )}
+
                 <p className='text-white mt-4'>
                     Don't have an account?{" "}
                     <Link to='/' className={`hover:text-blue-500`}>

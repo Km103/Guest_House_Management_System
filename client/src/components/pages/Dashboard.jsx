@@ -15,7 +15,7 @@ export default function Dashboard() {
         suiteRooms: [],
         totalPrice: 0,
         date: "",
-        day: 0,
+        day: 1,
     });
 
     const [bookings, setBookings] = useState({
@@ -24,6 +24,19 @@ export default function Dashboard() {
         totalPrice: 0,
         date: "",
     });
+
+    // const myDate = new Date();
+    // const dd = myDate.getDate();
+    // const mm = myDate.getMonth() + 1; //January is 0!
+    // const yyyy = myDate.getFullYear();
+
+    // const today = new Date(yyyy, mm, dd);
+
+    // const ddentered = selectedRoomsData.date?.getDate();
+    // const mmentered = selectedRoomsData.date?.getMonth() + 1; //January is 0!
+    // const yyyyentered = selectedRoomsData.date?.getFullYear();
+
+    // const enteredDate = new Date(yyyyentered, mmentered, ddentered);
 
     const [paid, setPaid] = useState(false);
 
@@ -255,6 +268,12 @@ export default function Dashboard() {
                                         });
                                     }}
                                 />
+                                {/* {enteredDate < today && (
+                                    <p className={`text-red-400 font-semibold`}>
+                                        Booking Date should be atleast after one
+                                        day of booking
+                                    </p>
+                                )} */}
                             </div>
                             <div
                                 className={`flex items-center mt-8 gap-5 w-max`}
@@ -267,6 +286,8 @@ export default function Dashboard() {
                                 <input
                                     className={`text-lg rounded-lg px-4 py-1 w-20 bg-slate-700 text-gray-200 select-none`}
                                     type='number'
+                                    min={1}
+                                    placeholder='1'
                                     onChange={(event) => {
                                         setSelectedRoomsData((prevState) => {
                                             return {
