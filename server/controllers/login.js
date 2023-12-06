@@ -40,6 +40,8 @@ const login = async (req, res) => {
             httpOnly: false,
         });
         res.status(200).json({
+            user : user,
+            token : token,
             message: "User logged in successfully",
             success: true,
         });

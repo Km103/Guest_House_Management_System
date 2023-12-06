@@ -4,6 +4,7 @@ const registerRoutes = require("./routes/register");
 const loginRoutes = require("./routes/login");
 const adminRoutes = require("./routes/admin");
 const roomRoutes = require("./routes/room");
+const bookingRoutes=require("./routes/booking");
 
 const cookieParser = require("cookie-parser");
 
@@ -26,6 +27,7 @@ app.use("/api/register", registerRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/rooms", roomRoutes);
+app.use("/api/booking",bookingRoutes)
 
 const port = 8000;
 
