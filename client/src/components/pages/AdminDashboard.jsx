@@ -6,6 +6,7 @@ import RoomSelectionBox from "../UI/RoomSelectionBox";
 import BookingsTable from "../BookingsTable";
 
 import { normalRooms, suiteRooms, DummyBookings } from "../../lib/data";
+import AdminServicePanel from "../BookingsHelpers/AdminServicePanel";
 
 export default function AdminDashboard() {
     const [selectedOptionNavigation, setselectedOptionNavigation] = useState(1);
@@ -220,9 +221,10 @@ export default function AdminDashboard() {
             {/* Bookings  */}
             {selectedOptionNavigation === 2 && (
                 <main
-                    className={`flex flex-col h-full items-center justify-center`}
+                    className={`flex h-full items-center w-full justify-center`}
                 >
                     <BookingsTable bookings={DummyBookings} />
+                    <AdminServicePanel />
                     {/* {bookings.normalRoom.length + bookings.suiteRoom.length >
                     0 ? (
                         <BookingsTable bookings={bookings} />

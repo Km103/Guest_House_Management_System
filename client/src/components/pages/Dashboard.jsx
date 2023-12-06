@@ -135,30 +135,25 @@ export default function Dashboard() {
                         </span>
                     </div>
                 </div>
-                <div className=''>
-                    <Link
-                        to='/paymentack'
-                        className={`text-xl text-white font-semibold text-center h-12 bg-green-600 flex items-center w-full rounded-lg justify-center   hover:cursor-pointer ${
-                            payButtonEnable
-                                ? "hover:bg-green-500"
-                                : "opacity-50 cursor-not-allowed"
-                        }`}
-                    >
-                        <button
-                            disabled={!payButtonEnable}
-                            onClick={paidHandler}
-                        >
-                            Proceed To Pay
-                        </button>
-                    </Link>
-                </div>
+                <Link
+                    to='/paymentack'
+                    className={`text-xl text-white font-semibold text-center h-12 bg-green-600 flex items-center w-full rounded-lg justify-center   hover:cursor-pointer ${
+                        payButtonEnable
+                            ? "hover:bg-green-500"
+                            : "opacity-50 cursor-not-allowed"
+                    }`}
+                >
+                    <button disabled={!payButtonEnable} onClick={paidHandler}>
+                        Proceed To Pay
+                    </button>
+                </Link>
             </div>
         );
     }
 
     return (
         <div
-            className={`w-4/5 h-5/6 bg-slate-800 rounded-lg shadow-lg flex flex-col `}
+            className={`w-4/5 h-max bg-slate-800 rounded-lg shadow-lg flex flex-col `}
         >
             <nav
                 className={`border-b-2 border-slate-500 shadow-lg py-6 px-8 text-lg`}
@@ -191,7 +186,7 @@ export default function Dashboard() {
             {selectedOptionNavigation === 1 && (
                 <main className={`flex h-full`}>
                     <section
-                        className={`w-4/5 py-6 px-8 border-r-2 border-slate-500`}
+                        className={`w-4/5 h-full py-6 px-8 border-r-2 border-slate-500`}
                     >
                         <div className={`flex flex-col gap-8`}>
                             <div className={`flex flex-col gap-4`}>
