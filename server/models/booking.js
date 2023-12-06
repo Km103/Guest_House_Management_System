@@ -12,6 +12,14 @@ const bookingschema=new mongoose.Schema({
     Rooms:{
         type:Array,
         required:[true,"Rooms array is necessary"],
+    },
+    checkin:{
+        type:String,
+        required:[true,"provide check in date"],
+    },
+    days:{
+        type:Number,
+        required:[true,"Rooms days are necessary"],
     }
 });
 

@@ -14,8 +14,9 @@ const userVerification = (req, res, next) => {
         } else {
             const user = await facultyData.findById(data.id);
             if (user) {
+                req.customer_id = req.cookies.userId
                 next();
-            } else return res.json({ status: false });
+            } else return res.json({ msg:"user verification failed",status: false });
         }
     });
 };

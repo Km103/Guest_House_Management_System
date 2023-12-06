@@ -1,9 +1,9 @@
 const RoomData = require("../models/room");
 
-const updateRoomPrice = (req, res) => {
+const updateRoomPrice = async(req, res) => {
     const { price, roomNumber } = req.body;
 
-    RoomData.findOne({ roomNo: roomNumber })
+     RoomData.findOne({ roomNo: roomNumber })
         .then((room) => {
             if (!room) {
                 res.status(404).json({ msg: "Room not found" });
@@ -15,7 +15,7 @@ const updateRoomPrice = (req, res) => {
             res.status(500).json({ msg: "Internal Error" });
         });
 
-    RoomData.findOneAndUpdate({ roomNo: roomNumber }, { price: price })
+     RoomData.findOneAndUpdate({ roomNo: roomNumber }, { price: price })
         .then((resp) => {
             res.status(200).json({
                 updatedRoom: resp,

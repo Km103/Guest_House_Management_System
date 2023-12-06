@@ -17,6 +17,10 @@ const roomschema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    booking_id:{
+        type:mongoose.Types.ObjectId,
+        default:null
+    }
 });
 
 module.exports = mongoose.model("room", roomschema);
