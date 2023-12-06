@@ -36,16 +36,19 @@ const LoginForm = () => {
                 password,
             }),
         });
-        console.log(data);
+        const dataJson = await data.json();
+        const { token } = dataJson;
 
-        // const { status } = data;
-        // if (status === 404 || status === 403) {
-        //     setError("Invalid username or password");
-        //     setUsername("");
-        //     setPassword("");
-        // } else if (status === 200) {
-        //     navigate("/dashboard");
-        // }
+        const { status } = data;
+        if (status === 404 || status === 403) {
+            setError("Invalid username or password");
+            setUsername("");
+            setPassword("");
+        } else if (status === 200) {
+            localStorage.setItem("token", token);
+            localStorage.setItem("userId", dataJson.user._id);
+            navigate("/dashboard");
+        }
     };
 
     return (

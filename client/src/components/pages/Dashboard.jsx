@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -24,6 +24,28 @@ export default function Dashboard() {
         totalPrice: 0,
         date: "",
     });
+
+    useEffect(() => {
+        const cookie = localStorage.getItem("token");
+        console.log(cookie);
+
+        // const verifyCookie = async () => {
+        //     if (!cookie.token) {
+        //         navigate("/login");
+        //     }
+        //     const { data } = await axios.post(
+        //         "http://localhost:8000/",
+        //     );
+        //     const { status, user } = data;
+        //     setUsername(user);
+        //     if(status === )
+        // };
+        // verifyCookie();
+        // }, [cookies, navigate, removeCookie]);
+    }, []);
+    // const Logout = () => {
+    //     removeCookie("token");
+    //     navigate("/signup");
 
     // const myDate = new Date();
     // const dd = myDate.getDate();
