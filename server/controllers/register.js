@@ -11,7 +11,7 @@ const createFacultyAccount=async(req,res)=>{
         const userdata=req.body;
         const existingUser = await facultyData.findOne({email:req.body.email});
         if(existingUser){
-            return res.json({ message: "User already exists" });
+            return res.status(400).json({ message: "User already exists" });
         }
 
         
@@ -35,7 +35,7 @@ const createFacultyAccount=async(req,res)=>{
                 withCredentials: true,
                 httpOnly: false,
             });
-            res.json({msg:"account created"});
+            res.status(200).json({msg:"account created",success:true});
             
         })
   
@@ -50,9 +50,9 @@ const createStudentAccount=async(req,res)=>{
         const password=req.body.password;
 
         const userdata=req.body;
-        const existingUser = await facultyData.findOne({email:req.body.email});
+        const existingUser = await studentData.findOne({email:req.body.email});
         if(existingUser){
-            return res.json({ message: "User already exists" });
+            return res.status(400).json({ message: "User already exists" });
         }
 
         await bcrypt.hash(password, 12, function(err, hashed) {
@@ -74,7 +74,7 @@ const createStudentAccount=async(req,res)=>{
                 withCredentials: true,
                 httpOnly: false,
             });
-            res.json({msg:"account created"});
+            res.status(200).json({msg:"account created",success:true});
             
         })
     }

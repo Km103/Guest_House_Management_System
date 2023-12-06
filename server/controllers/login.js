@@ -40,7 +40,7 @@ const login= async(req,res)=>{
             withCredentials: true,
             httpOnly: false,
         });
-        res.status(201).json({ message: "User logged in successfully"});
+        res.status(200).json({ message: "User logged in successfully", success : true});
 
     }
     catch(error){

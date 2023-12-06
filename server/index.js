@@ -3,7 +3,11 @@ const express=require('express');
 const registerRoutes=require('./routes/register');
 const loginRoutes=require('./routes/login');
 const adminRoutes=require('./routes/admin');
+const roomRoutes = require('./routes/room')
+
 const cookieParser = require("cookie-parser");
+
+
 const cors = require("cors");
 
 
@@ -20,6 +24,7 @@ app.use(express.json());
 app.use('/api/register',registerRoutes);
 app.use('/api/login',loginRoutes);
 app.use('/api/admin',adminRoutes);
+app.use('/api/rooms', roomRoutes)
 
 const port=8000;
 
