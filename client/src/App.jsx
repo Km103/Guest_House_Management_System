@@ -1,9 +1,12 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import LoginForm from "./components/LoginForm";
 import FacultyRegistration from "./components/RegisterForms.jsx/FacultyRegistration";
 import RelativeRegistration from "./components/RegisterForms.jsx/RelativeRegistration";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import EntryQuestions from "./components/EntryQuestions.jsx";
-import ErrorPage from "./components/ErrorPage.jsx";
+import ErrorPage from "./components/pages/ErrorPage.jsx";
+import Dashboard from "./components/pages/Dashboard.jsx";
+import PaymentAck from "./components/pages/PaymentAck.jsx";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +29,14 @@ const router = createBrowserRouter([
     {
         path: "/auth/login",
         element: <LoginForm />,
+    },
+    {
+        path: "/dashboard",
+        element: <Dashboard />,
+    },
+    {
+        path: "/paymentack",
+        element: <PaymentAck />,
     },
 ]);
 

@@ -89,7 +89,7 @@ const EntryQuestions = () => {
                 </button>
             </Link>
             <p className='text-white'>
-                Already registered ?
+                Already registered ? <tab />
                 <Link to='/auth/login' className={`hover:text-blue-500`}>
                     Login
                 </Link>

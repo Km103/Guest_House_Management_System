@@ -26,7 +26,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className='flex flex-col items-center justify-center h-screen bg-gray-900'>
+        <div className='flex flex-col items-center gap-3 justify-center h-screen bg-gray-900'>
             <form className='bg-gray-800 p-8 rounded-lg shadow-lg'>
                 <h2 className='text-2xl font-bold text-white mb-4'>Login</h2>
                 <div className='mb-4'>
@@ -53,16 +53,18 @@ const LoginForm = () => {
                         onChange={handlePasswordChange}
                     />
                 </div>
-                <button
-                    type='submit'
-                    className={`bg-blue-600 text-white rounded-lg py-2 px-4 mt-4 ${
-                        isFormValid ? "" : "opacity-50 cursor-not-allowed"
-                    }`}
-                    disabled={!isFormValid}
-                    onClick={handleSubmit}
-                >
-                    Login
-                </button>
+                <Link to='/dashboard'>
+                    <button
+                        type='submit'
+                        className={`bg-blue-600 text-white rounded-lg py-2 px-4 mt-4 ${
+                            isFormValid ? "" : "opacity-50 cursor-not-allowed"
+                        }`}
+                        disabled={!isFormValid}
+                        // onClick={handleSubmit}
+                    >
+                        Login
+                    </button>
+                </Link>
                 <p className='text-white mt-4'>
                     Don't have an account?{" "}
                     <Link to='/' className={`hover:text-blue-500`}>
@@ -70,11 +72,11 @@ const LoginForm = () => {
                     </Link>
                 </p>
             </form>
-            <p className='text-white'>
-                <Link to='/auth/login' className={`hover:text-blue-500`}>
+            <div className='text-white text-center h-12 bg-blue-600 flex items-center w-full rounded-lg justify-center hover:bg-transparent hover:border-2 hover:border-blue-600 hover:cursor-pointer hover:text-blue-500'>
+                <Link to='/' className={`text-xl `}>
                     Back
                 </Link>
-            </p>
+            </div>
         </div>
     );
 };
