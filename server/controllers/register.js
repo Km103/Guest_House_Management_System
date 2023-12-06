@@ -14,11 +14,8 @@ const createFacultyAccount=async(req,res)=>{
             return res.json({ message: "User already exists" });
         }
 
-        const token = createSecretToken(user._id);
-        res.cookie("token", token, {
-            withCredentials: true,
-            httpOnly: false,
-        });
+        
+     
         
         await bcrypt.hash(password, 12, function(err, hashed) {
             if(err) {
@@ -33,7 +30,13 @@ const createFacultyAccount=async(req,res)=>{
             catch(error){
                 res.status(500).json({msg:error});
             }
+            const token = createSecretToken(facultyData._id);
+            res.cookie("token", token, {
+                withCredentials: true,
+                httpOnly: false,
+            });
             res.json({msg:"account created"});
+            
         })
   
     }
@@ -66,6 +69,11 @@ const createStudentAccount=async(req,res)=>{
             catch(error){
                 res.status(500).json({msg:error});
             }
+            const token = createSecretToken(studentData._id);
+            res.cookie("token", token, {
+                withCredentials: true,
+                httpOnly: false,
+            });
             res.json({msg:"account created"});
             
         })
