@@ -9,12 +9,13 @@ const adminRoutes=require('./routes/admin');
 
 const app=express();
 
+app.use(express.json());
 
 app.use('/api/register',registerRoutes);
 app.use('/api/login',loginRoutes);
 app.use('/api/admin',adminRoutes);
 
-const port=3002;
+const port=8000;
 
 const start=async()=>{
     try {

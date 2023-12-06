@@ -5,7 +5,7 @@ const studentschema=new mongoose.Schema({
         type:String,
         required:[true,"must provide name of relative "],
     },
-    RollNo:{
+    RollNo:{    
         type:String,
         required:[true,"must provide student college id "],
     },    
