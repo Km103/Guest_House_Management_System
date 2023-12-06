@@ -1,6 +1,7 @@
 const facultyData=require('../models/faculty');
 const studentData=require('../models/student');
 const bcrypt = require ('bcrypt');
+const { createSecretToken } = require("../util/SecretToken");
 
 const createFacultyAccount=async(req,res)=>{
 
@@ -8,7 +9,17 @@ const createFacultyAccount=async(req,res)=>{
         const password=req.body.password;
 
         const userdata=req.body;
+        const existingUser = await facultyData.findOne({email:req.body.email});
+        if(existingUser){
+            return res.json({ message: "User already exists" });
+        }
 
+        const token = createSecretToken(user._id);
+        res.cookie("token", token, {
+            withCredentials: true,
+            httpOnly: false,
+        });
+        
         await bcrypt.hash(password, 12, function(err, hashed) {
             if(err) {
                 console.log(err)
@@ -36,6 +47,10 @@ const createStudentAccount=async(req,res)=>{
         const password=req.body.password;
 
         const userdata=req.body;
+        const existingUser = await facultyData.findOne({email:req.body.email});
+        if(existingUser){
+            return res.json({ message: "User already exists" });
+        }
 
         await bcrypt.hash(password, 12, function(err, hashed) {
             if(err) {
