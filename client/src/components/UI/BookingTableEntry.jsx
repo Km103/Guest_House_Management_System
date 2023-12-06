@@ -1,14 +1,21 @@
 export default function BookingsTableEntry({ booking }) {
     return (
-        <div className={`flex justify-between w-full h-1/10`}>
+        <div
+            className={`flex  text-gray-200 justify-evenly w-full h-1/6 items-center hover:bg-slate-700 hover:cursor-pointer rounded-lg`}
+        >
             {/* Room / Suite  */}
-            <span>{booking.title}</span>
+            <span className={`w-1/5 text-center`}>{booking.name}</span>
+
+            {/* Room Number  */}
+            <span className={`w-1/5 text-center`}>{booking.room}</span>
 
             {/* Check In Date */}
-            <span>{booking.date}</span>
+            <span className={`w-1/5 text-center`}>{booking.checkIn}</span>
+            {/* Check Out Date */}
+            <span className={`w-1/5 text-center`}>{booking.checkOut}</span>
 
             {/* Payment Paid  */}
-            <span>{booking.totalPrice}</span>
+            <span className={`w-1/5 text-center`}>{booking.totalPrice}</span>
         </div>
     );
 }

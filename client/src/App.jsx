@@ -7,6 +7,7 @@ import EntryQuestions from "./components/EntryQuestions.jsx";
 import ErrorPage from "./components/pages/ErrorPage.jsx";
 import Dashboard from "./components/pages/Dashboard.jsx";
 import PaymentAck from "./components/pages/PaymentAck.jsx";
+import AdminDashboard from "./components/pages/AdminDashboard.jsx";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     {
         path: "/paymentack",
         element: <PaymentAck />,
+    },
+    {
+        path: "/admin/dashboard",
+        element: <AdminDashboard />,
     },
 ]);
 

@@ -3,9 +3,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import RoomSelectionBox from "../UI/RoomSelectionBox";
-
-import { normalRooms, suiteRooms } from "../../lib/data";
 import BookingsTable from "../BookingsTable";
+
+import { normalRooms, suiteRooms, DummyBookings } from "../../lib/data";
+import BookingsServicePanel from "../BookingsHelpers/BookingsServicePanel";
 
 export default function Dashboard() {
     const [selectedOptionNavigation, setselectedOptionNavigation] = useState(1);
@@ -14,6 +15,7 @@ export default function Dashboard() {
         suiteRooms: [],
         totalPrice: 0,
         date: "",
+        day: 0,
     });
 
     const [bookings, setBookings] = useState({
@@ -91,7 +93,8 @@ export default function Dashboard() {
         </p>
     );
 
-    const payButtonEnable = selectedRoomsData.date.length > 0;
+    const payButtonEnable =
+        selectedRoomsData.date.length > 0 && selectedRoomsData.day;
 
     if (
         selectedRoomsData.normalRooms.length +
@@ -236,24 +239,49 @@ export default function Dashboard() {
                                 </div>
                             </div>
                         </div>
-                        <div className={`flex items-center mt-8 gap-5`}>
-                            <p
-                                className={`text-xl font-semibold text-gray-200`}
+                        <div className={`w-full flex gap-5`}>
+                            <div
+                                className={`flex items-center mt-8 gap-5 w-max  `}
                             >
-                                Select Check In Date :
-                            </p>
-                            <input
-                                className={`text-lg rounded-lg px-4 py-1 bg-slate-700 text-gray-200 select-none`}
-                                type='date'
-                                onChange={() => {
-                                    setSelectedRoomsData((prevState) => {
-                                        return {
-                                            ...prevState,
-                                            date: event.target.value,
-                                        };
-                                    });
-                                }}
-                            />
+                                <p
+                                    className={`text-xl font-semibold text-gray-200`}
+                                >
+                                    Select Check In Date :
+                                </p>
+                                <input
+                                    className={`text-lg rounded-lg px-4 py-1 bg-slate-700 text-gray-200 select-none`}
+                                    type='date'
+                                    onChange={(event) => {
+                                        setSelectedRoomsData((prevState) => {
+                                            return {
+                                                ...prevState,
+                                                date: event.target.value,
+                                            };
+                                        });
+                                    }}
+                                />
+                            </div>
+                            <div
+                                className={`flex items-center mt-8 gap-5 w-max`}
+                            >
+                                <p
+                                    className={`text-xl font-semibold text-gray-200`}
+                                >
+                                    No. of days :
+                                </p>
+                                <input
+                                    className={`text-lg rounded-lg px-4 py-1 w-20 bg-slate-700 text-gray-200 select-none`}
+                                    type='number'
+                                    onChange={(event) => {
+                                        setSelectedRoomsData((prevState) => {
+                                            return {
+                                                ...prevState,
+                                                day: event.target.value,
+                                            };
+                                        });
+                                    }}
+                                />
+                            </div>
                         </div>
                     </section>
                     <section
@@ -266,16 +294,18 @@ export default function Dashboard() {
             {/* Bookings  */}
             {selectedOptionNavigation === 2 && (
                 <main
-                    className={`flex flex-col h-full items-center justify-center`}
+                    className={`flex h-full items-center w-full justify-center`}
                 >
-                    {bookings.normalRooms.length + bookings.suiteRooms.length >
+                    <BookingsTable bookings={DummyBookings} />
+                    <BookingsServicePanel />
+                    {/* {bookings.normalRooms.length + bookings.suiteRooms.length >
                     0 ? (
-                        <BookingsTable bookings={bookings} />
+                        <BookingsTable bookings={DummyBookings} />
                     ) : (
                         <p className={`text-bold text-gray-200 text-4xl`}>
                             Your bookings will be displayed here
                         </p>
-                    )}
+                    )} */}
                 </main>
             )}
         </div>
