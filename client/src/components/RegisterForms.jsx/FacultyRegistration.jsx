@@ -35,7 +35,7 @@ const FacultyRegistration = () => {
         event.preventDefault();
         // Perform registration logic here
         const { data } = await fetch(
-            "https://isdl-api.onrender.com/api/register/user/faculty/",
+            "http://localhost:8000/api/register/user/faculty/",
             {
                 method: "POST",
                 headers: {
