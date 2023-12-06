@@ -1,6 +1,6 @@
 const mongoose=require('mongoose');
 
-const tprcchema=new mongoose.Schema({    
+const tprcschema=new mongoose.Schema({    
     email:{
         type:String,
         required:[true,"must provide student email id"],
