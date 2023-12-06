@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import RoomSelectionBox from "../UI/RoomSelectionBox";
 import BookingsTable from "../BookingsTable";
@@ -8,7 +8,14 @@ import BookingsTable from "../BookingsTable";
 import { normalRooms, suiteRooms, DummyBookings } from "../../lib/data";
 import BookingsServicePanel from "../BookingsHelpers/BookingsServicePanel";
 
+import userContext from "../../context/UserContext";
+
 export default function Dashboard() {
+    const navigate = useNavigate();
+    const { user, setUser } = useContext(userContext);
+
+    console.log(user);
+
     const [selectedOptionNavigation, setselectedOptionNavigation] = useState(1);
     const [selectedRoomsData, setSelectedRoomsData] = useState({
         normalRooms: [],
@@ -26,39 +33,16 @@ export default function Dashboard() {
     });
 
     useEffect(() => {
-        const cookie = localStorage.getItem("token");
-        console.log(cookie);
+        const token = localStorage.getItem("token");
 
-        // const verifyCookie = async () => {
-        //     if (!cookie.token) {
-        //         navigate("/login");
-        //     }
-        //     const { data } = await axios.post(
-        //         "http://localhost:8000/",
-        //     );
-        //     const { status, user } = data;
-        //     setUsername(user);
-        //     if(status === )
-        // };
-        // verifyCookie();
-        // }, [cookies, navigate, removeCookie]);
+        console.log(user);
+
+        if (token) {
+            console.log("User is logged in");
+        } else {
+            navigate("/auth/login");
+        }
     }, []);
-    // const Logout = () => {
-    //     removeCookie("token");
-    //     navigate("/signup");
-
-    // const myDate = new Date();
-    // const dd = myDate.getDate();
-    // const mm = myDate.getMonth() + 1; //January is 0!
-    // const yyyy = myDate.getFullYear();
-
-    // const today = new Date(yyyy, mm, dd);
-
-    // const ddentered = selectedRoomsData.date?.getDate();
-    // const mmentered = selectedRoomsData.date?.getMonth() + 1; //January is 0!
-    // const yyyyentered = selectedRoomsData.date?.getFullYear();
-
-    // const enteredDate = new Date(yyyyentered, mmentered, ddentered);
 
     const [paid, setPaid] = useState(false);
 
@@ -104,20 +88,40 @@ export default function Dashboard() {
         });
     };
 
-    const paidHandler = () => {
+    const paidHandler = async (event) => {
+        event.preventDefault();
         setPaid(true);
-        setBookings((prevState) => {
-            const updatedBookings = [
-                ...prevState,
-                {
-                    normalRooms: selectedRoomsData.normalRooms,
-                    suiteRooms: selectedRoomsData.suiteRooms,
-                    totalPrice: selectedRoomsData.totalPrice,
-                    date: selectedRoomsData.date,
-                },
-            ];
-            return updatedBookings;
+        // setBookings((prevState) => {
+        //     const updatedBookings = {
+        //         normalRooms: selectedRoomsData.normalRooms,
+        //         suiteRooms: selectedRoomsData.suiteRooms,
+        //         totalPrice: selectedRoomsData.totalPrice,
+        //         date: selectedRoomsData.date,
+        //     };
+
+        //     return updatedBookings;
+        // });
+
+        const dataToBeSent = {
+            customer_id: user._id,
+            amount: selectedRoomsData.totalPrice,
+            Rooms: selectedRoomsData.normalRooms.concat(bookings.suiteRooms),
+            checkin: selectedRoomsData.date,
+            days: selectedRoomsData.day,
+            token: localStorage.getItem("token"),
+        };
+
+        console.log(dataToBeSent);
+
+        const res = await fetch("http://localhost:8000/api/booking", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataToBeSent),
         });
+        const data = await res.json();
+        console.log(data);
     };
 
     let selectedRoomComponent = (
@@ -137,7 +141,10 @@ export default function Dashboard() {
         0
     ) {
         selectedRoomComponent = (
-            <div className={`flex flex-col justify-between w-full h-full`}>
+            <form
+                onSubmit={paidHandler}
+                className={`flex flex-col justify-between w-full h-full`}
+            >
                 <div
                     className={`flex flex-col justify-start gap-4 h-full items-center w-full select-none`}
                 >
@@ -170,19 +177,18 @@ export default function Dashboard() {
                         </span>
                     </div>
                 </div>
-                <Link
-                    to='/paymentack'
+                <button
                     className={`text-xl text-white font-semibold text-center h-12 bg-green-600 flex items-center w-full rounded-lg justify-center   hover:cursor-pointer ${
                         payButtonEnable
                             ? "hover:bg-green-500"
                             : "opacity-50 cursor-not-allowed"
                     }`}
+                    type='submit'
+                    disabled={!payButtonEnable}
                 >
-                    <button disabled={!payButtonEnable} onClick={paidHandler}>
-                        Proceed To Pay
-                    </button>
-                </Link>
-            </div>
+                    Proceed To Pay
+                </button>
+            </form>
         );
     }
 

@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import userContext from "../context/UserContext";
 
 const LoginForm = () => {
     const navigate = useNavigate();
+
+    const { user, setUser } = useContext(userContext);
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -23,6 +27,15 @@ const LoginForm = () => {
         setIsFormValid(username !== "" && password !== "");
     };
 
+    useEffect(() => {
+        const user = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+
+        if (user && token) {
+            navigate("/dashboard");
+        }
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle login logic here
@@ -37,7 +50,9 @@ const LoginForm = () => {
             }),
         });
         const dataJson = await data.json();
-        const { token } = dataJson;
+        console.log(dataJson);
+        const { token, user } = dataJson;
+        console.log(token, user);
 
         const { status } = data;
         if (status === 404 || status === 403) {
@@ -46,7 +61,7 @@ const LoginForm = () => {
             setPassword("");
         } else if (status === 200) {
             localStorage.setItem("token", token);
-            localStorage.setItem("userId", dataJson.user._id);
+            setUser(user);
             navigate("/dashboard");
         }
     };

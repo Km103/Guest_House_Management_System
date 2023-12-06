@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import RoomSelectionBox from "../UI/RoomSelectionBox";
 import BookingsTable from "../BookingsTable";
@@ -9,6 +9,8 @@ import { normalRooms, suiteRooms, DummyBookings } from "../../lib/data";
 import AdminServicePanel from "../BookingsHelpers/AdminServicePanel";
 
 export default function AdminDashboard() {
+    const navigate = useNavigate();
+
     const [selectedOptionNavigation, setselectedOptionNavigation] = useState(1);
     const [selectedRoom, setSelectedRoom] = useState({
         type: "",
@@ -21,6 +23,17 @@ export default function AdminDashboard() {
         totalPrice: 0,
         date: "",
     });
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+
+        if (user && token) {
+            console.log("User is logged in");
+        } else {
+            navigate("/auth/login");
+        }
+    }, []);
 
     const [changedPrice, setChangedPrice] = useState(0);
 

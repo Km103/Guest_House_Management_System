@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,13 @@ const FacultyRegistration = () => {
     const [password, setPassword] = useState("");
     const [reenterPassword, setReenterPassword] = useState("");
     const [error, setError] = useState("");
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            navigate("/dashboard");
+        }
+    }, []);
 
     const facultyEmailRegex = /^[a-zA-Z0-9._%+-]+@lnmiit\.ac\.in$/i;
     const facultyEmailRegexMatch = facultyEmail.match(facultyEmailRegex);
@@ -48,15 +55,17 @@ const FacultyRegistration = () => {
                 }),
             }
         );
-        console.log(res);
+        const data = await res.json();
 
-        // const { status } = data;
+        const { status, token, user } = data;
 
-        // if (status === 404 || status === 403) {
-        //     setError("Something's wrong");
-        // } else if (status === 200) {
-        //     navigate("/dashboard");
-        // }
+        if (status === 404 || status === 403) {
+            setError("Something's wrong");
+        } else if (status === 200) {
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", user);
+            navigate("/dashboard");
+        }
     };
 
     return (

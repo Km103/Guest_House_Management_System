@@ -9,11 +9,13 @@ import Dashboard from "./components/pages/Dashboard.jsx";
 import PaymentAck from "./components/pages/PaymentAck.jsx";
 import AdminDashboard from "./components/pages/AdminDashboard.jsx";
 
+import userContext from "./context/UserContext.js";
+import { useState } from "react";
+
 const router = createBrowserRouter([
     {
         path: "/",
         element: <EntryQuestions />,
-        errorElement: <ErrorPage />,
     },
     {
         path: "/auth/register/faculty",
@@ -47,15 +49,22 @@ const router = createBrowserRouter([
         path: "/admin/dashboard",
         element: <AdminDashboard />,
     },
+    {
+        path: "*",
+        element: <ErrorPage />,
+    },
 ]);
 
 function App() {
+    const [user, setUser] = useState({});
     return (
-        <div
-            className={`flex flex-col h-screen w-full items-center justify-center`}
-        >
-            <RouterProvider router={router} />;
-        </div>
+        <userContext.Provider value={{ user, setUser }}>
+            <div
+                className={`flex flex-col h-screen w-full items-center justify-center`}
+            >
+                <RouterProvider router={router} />;
+            </div>
+        </userContext.Provider>
     );
 }
 

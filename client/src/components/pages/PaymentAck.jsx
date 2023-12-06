@@ -1,6 +1,18 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
+import { Link, useNavigate } from "react-router-dom";
 
 export default function PaymentAck() {
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            console.log("User is logged in");
+        } else {
+            navigate("/auth/login");
+        }
+    }, []);
     return (
         <div className={`flex flex-col items-center gap-10`}>
             <p className={`text-4xl font-bold text-gray-200`}>Payment Done</p>

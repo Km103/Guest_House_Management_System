@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -16,6 +16,13 @@ const RelativeRegistrations = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [reenterPassword, setReenterPassword] = useState("");
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            navigate("/dashboard");
+        }
+    }, []);
 
     const rollNoRegex =
         /^(?!00)[1-9][0-9](UCS|DCS|UCC|UEC|DEC|UME|PMT|PPH|PME|PEC|PCS)(?!000)[0-9]{3}$/i;
@@ -57,15 +64,17 @@ const RelativeRegistrations = () => {
                 }),
             }
         );
-        console.log(res);
+        const data = await res.json();
 
-        // const { status } = data;
+        const { status, token, user } = data;
 
-        // if (status === 404 || status === 403) {
-        //     setError("Something's wrong");
-        // } else if (status === 200) {
-        //     navigate("/dashboard");
-        // }
+        if (status === 404 || status === 403) {
+            setError("Something's wrong");
+        } else if (status === 200) {
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", user);
+            navigate("/dashboard");
+        }
     };
 
     return (

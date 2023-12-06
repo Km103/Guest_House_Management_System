@@ -4,7 +4,8 @@ const studentData = require("../models/student");
 const tprcData = require("../models/tprc");
 
 const userVerification = (req, res, next) => {
-    const token = req.cookies.token;
+    const token = req.body.token;
+
     if (!token) {
         return res.json({ status: false });
     }
@@ -14,9 +15,13 @@ const userVerification = (req, res, next) => {
         } else {
             const user = await facultyData.findById(data.id);
             if (user) {
-                req.customer_id = req.cookies.userId
                 next();
-            } else return res.json({ msg:"user verification failed",status: false });
+            } else {
+                return res.json({
+                    msg: "user verification failed",
+                    status: false,
+                });
+            }
         }
     });
 };
