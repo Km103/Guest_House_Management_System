@@ -26,33 +26,34 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle login logic here
-        const { data } = await fetch(
-            "https://isdl-api.onrender.com/api/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    username,
-                    password,
-                }),
-            }
-        );
+        const data = await fetch("http://localhost:8000/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: username,
+                password,
+            }),
+        });
+        console.log(data);
 
-        const { status } = data;
-        if (status === 404 || status === 403) {
-            setError("Invalid username or password");
-            setUsername("");
-            setPassword("");
-        } else if (status === 200) {
-            navigate("/dashboard");
-        }
+        // const { status } = data;
+        // if (status === 404 || status === 403) {
+        //     setError("Invalid username or password");
+        //     setUsername("");
+        //     setPassword("");
+        // } else if (status === 200) {
+        //     navigate("/dashboard");
+        // }
     };
 
     return (
-        <div className='flex flex-col items-center gap-3 justify-center h-screen bg-gray-900'>
-            <form className='bg-gray-800 p-8 rounded-lg shadow-lg'>
+        <form
+            className='flex flex-col items-center gap-3 justify-center h-screen bg-gray-900'
+            onSubmit={handleSubmit}
+        >
+            <div className='bg-gray-800 p-8 rounded-lg shadow-lg'>
                 <h2 className='text-2xl font-bold text-white mb-4'>Login</h2>
                 <div className='mb-4'>
                     <label htmlFor='username' className='text-white'>
@@ -78,18 +79,16 @@ const LoginForm = () => {
                         onChange={handlePasswordChange}
                     />
                 </div>
-                <Link to='/dashboard'>
-                    <button
-                        type='submit'
-                        className={`bg-blue-600 text-white rounded-lg py-2 px-4 mt-4 ${
-                            isFormValid ? "" : "opacity-50 cursor-not-allowed"
-                        }`}
-                        disabled={!isFormValid}
-                        // onClick={handleSubmit}
-                    >
-                        Login
-                    </button>
-                </Link>
+                <button
+                    type='submit'
+                    className={`bg-blue-600 text-white rounded-lg py-2 px-4 mt-4 ${
+                        isFormValid ? "" : "opacity-50 cursor-not-allowed"
+                    }`}
+                    disabled={!isFormValid}
+                    // onClick={handleSubmit}
+                >
+                    Login
+                </button>
                 {error.length > 0 && (
                     <div className={`w-80 text-red-400 text-center`}>
                         {error}
@@ -102,13 +101,13 @@ const LoginForm = () => {
                         Register
                     </Link>
                 </p>
-            </form>
+            </div>
             <div className='text-white text-center h-12 bg-blue-600 flex items-center w-full rounded-lg justify-center hover:bg-transparent hover:border-2 hover:border-blue-600 hover:cursor-pointer hover:text-blue-500'>
                 <Link to='/' className={`text-xl `}>
                     Back
                 </Link>
             </div>
-        </div>
+        </form>
     );
 };
 

@@ -39,9 +39,33 @@ const RelativeRegistrations = () => {
         setStep(step - 1);
     };
 
-    const handleRegister = (data) => {
+    const handleRegister = async (event) => {
+        // event.preventDefault();
         // Perform registration logic here
-        console.log(data);
+        const res = await fetch(
+            "http://localhost:8000/api/register/user/student/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: guestName,
+                    RollNo: studentRollNo,
+                    email: username,
+                    password,
+                }),
+            }
+        );
+        console.log(res);
+
+        // const { status } = data;
+
+        // if (status === 404 || status === 403) {
+        //     setError("Something's wrong");
+        // } else if (status === 200) {
+        //     navigate("/dashboard");
+        // }
     };
 
     return (

@@ -34,7 +34,7 @@ const FacultyRegistration = () => {
     const handleRegister = async (event) => {
         event.preventDefault();
         // Perform registration logic here
-        const { data } = await fetch(
+        const res = await fetch(
             "http://localhost:8000/api/register/user/faculty/",
             {
                 method: "POST",
@@ -43,20 +43,20 @@ const FacultyRegistration = () => {
                 },
                 body: JSON.stringify({
                     email: username,
-                    facultyName,
-                    facultyEmail,
+                    name: facultyName,
                     password,
                 }),
             }
         );
+        console.log(res);
 
-        const { status } = data;
+        // const { status } = data;
 
-        if (status === 404 || status === 403) {
-            setError("Something's wrong");
-        } else if (status === 200) {
-            navigate("/dashboard");
-        }
+        // if (status === 404 || status === 403) {
+        //     setError("Something's wrong");
+        // } else if (status === 200) {
+        //     navigate("/dashboard");
+        // }
     };
 
     return (
