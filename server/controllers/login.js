@@ -2,7 +2,7 @@ const facultyData=require('../models/faculty');
 const studentData=require('../models/student');
 const tprcData=require('../models/tprc');
 const bcrypt = require ('bcrypt');
-
+const { createSecretToken } = require("../util/SecretToken");
 const saltRounds=12;
 
 const login= async(req,res)=>{
@@ -16,24 +16,31 @@ const login= async(req,res)=>{
         }
         const pass=req.body.password;
         let user;
+        let token;
         if(studentuser){
             user=studentuser;
+            token = createSecretToken(studentuser._id);
         }
         if(facultyuser){
             user=facultyuser;
+            token = createSecretToken(facultyuser._id);
         }
         if(tprcuser){
             user=tprcuser;
+            token = createSecretToken(tprcuser._id);
         }
         const hash=user.password;
         bcrypt.compare(pass, hash).then(function(result) {
             if(!result){
-                res.status(403).json({msg:"Invalid Password"});
+               return res.status(403).json({msg:"Invalid Password"});
             }
-            else{
-                res.status(200).json({msg:"login successful"});
-            }
+
         });
+        res.cookie("token", token, {
+            withCredentials: true,
+            httpOnly: false,
+        });
+        res.status(200).json({ message: "User logged in successfully", success : true});
 
     }
     catch(error){
