@@ -62,4 +62,25 @@ const getRooms = (req, res) => {
         });
 };
 
-module.exports = { addRoom, updateRoomPrice, getRooms };
+const checkout=async(req,res)=>{
+    try {
+        console.log(req.body);
+        const number=req.body.roomNo;
+        console.log(number)
+        const room= await RoomData.findOne({roomNo:number});
+        if(!room){
+            return res.status(400).json({msg:"Invalid Room number"});
+        }
+
+        await RoomData.updateOne({ roomNo: number },{ isOccupied: false });
+        await RoomData.updateOne({ roomNo: number },{ booking_id: null });
+
+        res.status(200).json({msg:"checkout successful"})
+
+    } catch (error) {
+        res.status(500).json({ msg: error });
+    }
+
+}
+
+module.exports = { addRoom, updateRoomPrice, getRooms,checkout };
