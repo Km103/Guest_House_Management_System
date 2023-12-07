@@ -34,10 +34,11 @@ export default function Dashboard() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        const allowed = localStorage.getItem("allowed");
 
         console.log(user);
 
-        if (token) {
+        if (token || allowed) {
             console.log("User is logged in");
         } else {
             navigate("/auth/login");
@@ -88,19 +89,14 @@ export default function Dashboard() {
         });
     };
 
+    const handleLogout = (event) => {
+        localStorage.removeItem("token");
+        navigate("/auth/login");
+    };
+
     const paidHandler = async (event) => {
         event.preventDefault();
         setPaid(true);
-        // setBookings((prevState) => {
-        //     const updatedBookings = {
-        //         normalRooms: selectedRoomsData.normalRooms,
-        //         suiteRooms: selectedRoomsData.suiteRooms,
-        //         totalPrice: selectedRoomsData.totalPrice,
-        //         date: selectedRoomsData.date,
-        //     };
-
-        //     return updatedBookings;
-        // });
 
         const dataToBeSent = {
             customer_id: user._id,
@@ -121,7 +117,7 @@ export default function Dashboard() {
             body: JSON.stringify(dataToBeSent),
         });
         const data = await res.json();
-        console.log(data);
+        navigate("/paymentack");
     };
 
     let selectedRoomComponent = (
@@ -193,52 +189,89 @@ export default function Dashboard() {
     }
 
     return (
-        <div
-            className={`w-4/5 h-max bg-slate-800 rounded-lg shadow-lg flex flex-col `}
-        >
+        <div className={`w-full h-full flex flex-col items-center`}>
             <nav
-                className={`border-b-2 border-slate-500 shadow-lg py-6 px-8 text-lg`}
+                className={`h-[10%] flex justify-between w-full px-10 items-center`}
             >
-                <ul className={`flex gap-14`}>
-                    <li
-                        className={`cursor-pointer transition-colors delay-50 font-bold ${
-                            selectedOptionNavigation === 1
-                                ? "text-gray-200"
-                                : "text-gray-600"
-                        }`}
-                        onClick={() => setselectedOptionNavigation(1)}
-                    >
-                        Book a Room
-                    </li>
-                    <li
-                        className={`cursor-pointer transition-colors delay-50 font-bold ${
-                            selectedOptionNavigation === 2
-                                ? "text-gray-200"
-                                : "text-gray-600"
-                        }
-                        }`}
-                        onClick={() => setselectedOptionNavigation(2)}
-                    >
-                        Bookings
-                    </li>
-                </ul>
+                <h1 className={`text-gray-200 text-4xl`}>
+                    The LNM Institute of Information Technology
+                </h1>
+                <button
+                    onClick={handleLogout}
+                    className={`text-red-400 text-2xl`}
+                >
+                    Logout
+                </button>
             </nav>
-            {/* Book a room  */}
-            {selectedOptionNavigation === 1 && (
-                <main className={`flex h-full`}>
-                    <section
-                        className={`w-4/5 h-full py-6 px-8 border-r-2 border-slate-500`}
-                    >
-                        <div className={`flex flex-col gap-8`}>
-                            <div className={`flex flex-col gap-4`}>
-                                <p
-                                    className={`text-gray-200 text-xl font-semibold`}
-                                >
-                                    Rooms
-                                </p>
-                                <div className={`flex flex-wrap gap-9`}>
-                                    {normalRooms.map((room, ind) => {
-                                        return (
+            <div
+                className={`w-4/5 h-max bg-slate-800 rounded-lg shadow-lg flex flex-col `}
+            >
+                <nav
+                    className={`border-b-2 border-slate-500 shadow-lg py-6 px-8 text-lg`}
+                >
+                    <ul className={`flex gap-14`}>
+                        <li
+                            className={`cursor-pointer transition-colors delay-50 font-bold ${
+                                selectedOptionNavigation === 1
+                                    ? "text-gray-200"
+                                    : "text-gray-600"
+                            }`}
+                            onClick={() => setselectedOptionNavigation(1)}
+                        >
+                            Book a Room
+                        </li>
+                        <li
+                            className={`cursor-pointer transition-colors delay-50 font-bold ${
+                                selectedOptionNavigation === 2
+                                    ? "text-gray-200"
+                                    : "text-gray-600"
+                            }
+                        }`}
+                            onClick={() => setselectedOptionNavigation(2)}
+                        >
+                            Bookings
+                        </li>
+                    </ul>
+                </nav>
+                {/* Book a room  */}
+                {selectedOptionNavigation === 1 && (
+                    <main className={`flex h-full`}>
+                        <section
+                            className={`w-4/5 h-full py-6 px-8 border-r-2 border-slate-500`}
+                        >
+                            <div className={`flex flex-col gap-8`}>
+                                <div className={`flex flex-col gap-4`}>
+                                    <p
+                                        className={`text-gray-200 text-xl font-semibold`}
+                                    >
+                                        Rooms
+                                    </p>
+                                    <div className={`flex flex-wrap gap-6`}>
+                                        {normalRooms.map((room, ind) => {
+                                            return (
+                                                <RoomSelectionBox
+                                                    selectRoomHandler={
+                                                        selectionHandler
+                                                    }
+                                                    deselectRoomHandler={
+                                                        deselectionHandler
+                                                    }
+                                                    key={ind + 1}
+                                                    roomTitle={room.title}
+                                                    price={room.price}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                                <div className={`flex flex-col gap-4`}>
+                                    <p
+                                        className={`text-gray-200 text-xl font-semibold`}
+                                    >
+                                        Suites
+                                    </p>
+                                    <div className={`flex flex-wrap gap-6`}>
+                                        {suiteRooms.map((room, ind) => (
                                             <RoomSelectionBox
                                                 selectRoomHandler={
                                                     selectionHandler
@@ -250,99 +283,83 @@ export default function Dashboard() {
                                                 roomTitle={room.title}
                                                 price={room.price}
                                             />
-                                        );
-                                    })}
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                            <div className={`flex flex-col gap-4`}>
-                                <p
-                                    className={`text-gray-200 text-xl font-semibold`}
+                            <div className={`w-full flex gap-5`}>
+                                <div
+                                    className={`flex items-center mt-8 gap-5 w-max  `}
                                 >
-                                    Suites
-                                </p>
-                                <div className={`flex flex-wrap gap-9`}>
-                                    {suiteRooms.map((room, ind) => (
-                                        <RoomSelectionBox
-                                            selectRoomHandler={selectionHandler}
-                                            deselectRoomHandler={
-                                                deselectionHandler
-                                            }
-                                            key={ind + 1}
-                                            roomTitle={room.title}
-                                            price={room.price}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <div className={`w-full flex gap-5`}>
-                            <div
-                                className={`flex items-center mt-8 gap-5 w-max  `}
-                            >
-                                <p
-                                    className={`text-xl font-semibold text-gray-200`}
-                                >
-                                    Select Check In Date :
-                                </p>
-                                <input
-                                    className={`text-lg rounded-lg px-4 py-1 bg-slate-700 text-gray-200 select-none`}
-                                    type='date'
-                                    onChange={(event) => {
-                                        setSelectedRoomsData((prevState) => {
-                                            return {
-                                                ...prevState,
-                                                date: event.target.value,
-                                            };
-                                        });
-                                    }}
-                                />
-                                {/* {enteredDate < today && (
+                                    <p
+                                        className={`text-xl font-semibold text-gray-200`}
+                                    >
+                                        Select Check In Date :
+                                    </p>
+                                    <input
+                                        className={`text-lg rounded-lg px-4 py-1 bg-slate-700 text-gray-200 select-none`}
+                                        type='date'
+                                        onChange={(event) => {
+                                            setSelectedRoomsData(
+                                                (prevState) => {
+                                                    return {
+                                                        ...prevState,
+                                                        date: event.target
+                                                            .value,
+                                                    };
+                                                }
+                                            );
+                                        }}
+                                    />
+                                    {/* {enteredDate < today && (
                                     <p className={`text-red-400 font-semibold`}>
                                         Booking Date should be atleast after one
                                         day of booking
                                     </p>
                                 )} */}
-                            </div>
-                            <div
-                                className={`flex items-center mt-8 gap-5 w-max`}
-                            >
-                                <p
-                                    className={`text-xl font-semibold text-gray-200`}
+                                </div>
+                                <div
+                                    className={`flex items-center mt-8 gap-5 w-max`}
                                 >
-                                    No. of days :
-                                </p>
-                                <input
-                                    className={`text-lg rounded-lg px-4 py-1 w-20 bg-slate-700 text-gray-200 select-none`}
-                                    type='number'
-                                    min={1}
-                                    placeholder='1'
-                                    onChange={(event) => {
-                                        setSelectedRoomsData((prevState) => {
-                                            return {
-                                                ...prevState,
-                                                day: event.target.value,
-                                            };
-                                        });
-                                    }}
-                                />
+                                    <p
+                                        className={`text-xl font-semibold text-gray-200`}
+                                    >
+                                        No. of days :
+                                    </p>
+                                    <input
+                                        className={`text-lg rounded-lg px-4 py-1 w-20 bg-slate-700 text-gray-200 select-none`}
+                                        type='number'
+                                        min={1}
+                                        placeholder='1'
+                                        onChange={(event) => {
+                                            setSelectedRoomsData(
+                                                (prevState) => {
+                                                    return {
+                                                        ...prevState,
+                                                        day: event.target.value,
+                                                    };
+                                                }
+                                            );
+                                        }}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    </section>
-                    <section
-                        className={`w-1/5 px-8 py-6 flex flex-col items-center justify-center`}
+                        </section>
+                        <section
+                            className={`w-1/5 px-8 py-6 flex flex-col items-center justify-center`}
+                        >
+                            {selectedRoomComponent}
+                        </section>
+                    </main>
+                )}
+                {/* Bookings  */}
+                {selectedOptionNavigation === 2 && (
+                    <main
+                        className={`flex h-full items-center w-full justify-center`}
                     >
-                        {selectedRoomComponent}
-                    </section>
-                </main>
-            )}
-            {/* Bookings  */}
-            {selectedOptionNavigation === 2 && (
-                <main
-                    className={`flex h-full items-center w-full justify-center`}
-                >
-                    <BookingsTable bookings={DummyBookings} />
-                    <BookingsServicePanel />
-                    {/* {bookings.normalRooms.length + bookings.suiteRooms.length >
+                        <BookingsTable bookings={DummyBookings} />
+                        <BookingsServicePanel />
+                        {/* {bookings.normalRooms.length + bookings.suiteRooms.length >
                     0 ? (
                         <BookingsTable bookings={DummyBookings} />
                     ) : (
@@ -350,8 +367,9 @@ export default function Dashboard() {
                             Your bookings will be displayed here
                         </p>
                     )} */}
-                </main>
-            )}
+                    </main>
+                )}
+            </div>
         </div>
     );
 }

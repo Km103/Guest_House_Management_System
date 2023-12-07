@@ -1,13 +1,5 @@
 export const normalRooms = [
     {
-        title: "101",
-        price: 800,
-    },
-    {
-        title: "102",
-        price: 800,
-    },
-    {
         title: "103",
         price: 800,
     },
@@ -20,23 +12,47 @@ export const normalRooms = [
         price: 800,
     },
     {
-        title: "201",
+        title: "106",
         price: 800,
     },
     {
-        title: "202",
+        title: "107",
         price: 800,
     },
     {
-        title: "203",
+        title: "108",
         price: 800,
     },
     {
-        title: "204",
+        title: "001",
         price: 800,
     },
     {
-        title: "205",
+        title: "002",
+        price: 800,
+    },
+    {
+        title: "003",
+        price: 800,
+    },
+    {
+        title: "004",
+        price: 800,
+    },
+    {
+        title: "005",
+        price: 800,
+    },
+    {
+        title: "006",
+        price: 800,
+    },
+    {
+        title: "007",
+        price: 800,
+    },
+    {
+        title: "008",
         price: 800,
     },
 ];
@@ -47,14 +63,6 @@ export const suiteRooms = [
     },
     {
         title: "Suite 102",
-        price: 1200,
-    },
-    {
-        title: "Suite 201",
-        price: 1200,
-    },
-    {
-        title: "Suite 202",
         price: 1200,
     },
 ];

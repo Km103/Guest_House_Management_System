@@ -11,6 +11,9 @@ import AdminServicePanel from "../BookingsHelpers/AdminServicePanel";
 export default function AdminDashboard() {
     const navigate = useNavigate();
 
+    const [fetchedFeedBacks, setFetchedFeedbacks] = useState([]);
+    const [fetchedBookings, setFetchedBookings] = useState([]);
+
     const [selectedOptionNavigation, setselectedOptionNavigation] = useState(1);
     const [selectedRoom, setSelectedRoom] = useState({
         type: "",
@@ -25,15 +28,63 @@ export default function AdminDashboard() {
     });
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-
-        if (user && token) {
-            console.log("User is logged in");
-        } else {
+        const isAdmin = localStorage.getItem("isAdmin");
+        if (!isAdmin) {
             navigate("/auth/login");
         }
+        fetch("http://localhost:8000/api/admin/feedback", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: "admin",
+                password: "admin",
+            }),
+        })
+            .then((res) => {
+                return res.json();
+            })
+            .then((dat) => {
+                setFetchedFeedbacks(dat);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        fetch("http://localhost:8000/api/booking/getAll", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => {
+                return res.json();
+            })
+            .then((dat) => {
+                const roomsBooking = dat.map((ele, ind) => {
+                    // Format the new date as a string (you can adjust the format as needed)
+                    // let checkoutDate = startDate.toISOString().split("T")[0];
+
+                    const booking = {
+                        name: ele.customer_id,
+                        totalPrice: ele.amount,
+                        checkIn: ele.checkin,
+                        day: ele.day,
+                    };
+
+                    return booking;
+                });
+                setFetchedBookings(roomsBooking);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
+
+    const handleLogout = (event) => {
+        localStorage.removeItem("token");
+        navigate("/auth/login");
+    };
 
     const [changedPrice, setChangedPrice] = useState(0);
 
@@ -145,6 +196,19 @@ export default function AdminDashboard() {
             className={`w-4/5 h-5/6 bg-slate-800 rounded-lg shadow-lg flex flex-col `}
         >
             <nav
+                className={`h-[10%] flex justify-between w-full px-10 items-center`}
+            >
+                <h1 className={`text-gray-200 text-4xl`}>
+                    The LNM Institute of Information Technology
+                </h1>
+                <button
+                    onClick={handleLogout}
+                    className={`text-red-400 text-2xl`}
+                >
+                    Logout
+                </button>
+            </nav>
+            <nav
                 className={`border-b-2 border-slate-500 shadow-lg py-6 px-8 text-lg`}
             >
                 <ul className={`flex gap-14`}>
@@ -236,7 +300,7 @@ export default function AdminDashboard() {
                 <main
                     className={`flex h-full items-center w-full justify-center`}
                 >
-                    <BookingsTable bookings={DummyBookings} />
+                    <BookingsTable bookings={fetchedBookings} />
                     <AdminServicePanel />
                     {/* {bookings.normalRoom.length + bookings.suiteRoom.length >
                     0 ? (

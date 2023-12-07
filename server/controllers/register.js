@@ -1,5 +1,6 @@
 const facultyData = require("../models/faculty");
 const studentData = require("../models/student");
+const tprcData = require("../models/tprc");
 const bcrypt = require("bcrypt");
 const { createSecretToken } = require("../util/SecretToken");
 
@@ -15,15 +16,16 @@ const createFacultyAccount = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        await bcrypt.hash(password, 12, function (err, hashed) {
+        await bcrypt.hash(password, 12, async function (err, hashed) {
             if (err) {
                 console.log(err);
                 res.json(err);
                 return;
             }
             userdata.password = hashed;
+            let user;
             try {
-                facultyData.create(userdata);
+                user = await facultyData.create(userdata);
             } catch (error) {
                 res.status(500).json({ msg: error });
             }
@@ -32,7 +34,12 @@ const createFacultyAccount = async (req, res) => {
                 withCredentials: true,
                 httpOnly: false,
             });
-            res.status(200).json({ msg: "account created", success: true });
+            res.status(200).json({
+                user: user,
+                token: token,
+                message: "User logged in successfully",
+                success: true,
+            });
         });
     } catch (error) {
         res.status(500).json({ msg: error });

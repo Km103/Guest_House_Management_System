@@ -49,4 +49,18 @@ const bookRoom = async (req, res) => {
     }
 };
 
-module.exports = bookRoom;
+const getAllbookings = (req, res) => {
+    const bookings = [];
+
+    bookingInfo
+        .find()
+        .then((bookings) => {
+            console.log(bookings);
+            res.status(200).json(bookings);
+        })
+        .catch((err) => {
+            res.status(500).json({ msg: "internal server error", err: err });
+        });
+};
+
+module.exports = { bookRoom, getAllbookings };

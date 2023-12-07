@@ -59,11 +59,10 @@ const FacultyRegistration = () => {
 
         const { status, token, user } = data;
 
-        if (status === 404 || status === 403) {
+        if (status === 404 || status === 403 || status === 404) {
             setError("Something's wrong");
         } else if (status === 200) {
             localStorage.setItem("token", token);
-            localStorage.setItem("user", user);
             navigate("/dashboard");
         }
     };

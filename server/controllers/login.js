@@ -3,19 +3,40 @@ const studentData = require("../models/student");
 const bcrypt = require("bcrypt");
 const { createSecretToken } = require("../util/SecretToken");
 const saltRounds = 12;
+const TPCRC = 2001;
+const admin = 1001;
 
 const login = async (req, res) => {
     try {
         const emailid = req.body.email;
+        const password = req.body.password;
 
-        if(emailid ==="tprc"){
-            if(password==="tprc"){
-                return res.status(200).json({msg:"TPRC login successfull"});
-            }
-            else{
-                return res.status(403).json({msg:"Incorrect Password"});
-            }
-        }
+        // if (emailid === "tprc") {
+        //     if (password === "tprc") {
+        //         token = createSecretToken(TPCRC);
+        //         console.log(token);
+        //         return res.status(200).json({
+        //             msg: "TPRC login successfull",
+        //             token: token,
+        //             success: true,
+        //         });
+        //     } else {
+        //         return res.status(403).json({ msg: "Incorrect Password" });
+        //     }
+        // }
+        // if (emailid === "admin") {
+        //     if (password === "admin") {
+        //         token = createSecretToken(admin);
+        //         console.log(token);
+        //         return res.status(200).json({
+        //             msg: "Admin login successfull",
+        //             token: token,
+        //             success: true,
+        //         });
+        //     } else {
+        //         return res.status(403).json({ msg: "Incorrect Password" });
+        //     }
+        // }
 
         const facultyuser = await facultyData.findOne({ email: emailid });
         const studentuser = await studentData.findOne({ email: emailid });
@@ -44,8 +65,8 @@ const login = async (req, res) => {
             httpOnly: false,
         });
         res.status(200).json({
-            user : user,
-            token : token,
+            user: user,
+            token: token,
             message: "User logged in successfully",
             success: true,
         });

@@ -14,7 +14,7 @@ const userVerification = (req, res, next) => {
             return res.json({ status: false });
         } else {
             const user1 = await facultyData.findById(data.id);
-            const user2=await studentData.findById(data.id);
+            const user2 = await studentData.findById(data.id);
             if (user1 || user2) {
                 next();
             } else {

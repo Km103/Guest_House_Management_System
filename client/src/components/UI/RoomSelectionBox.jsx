@@ -27,7 +27,7 @@ const RoomSelectionBox = ({
 
     return (
         <div
-            className={`rounded-md bg-slate-700  flex flex-col items-center justify-center border-4 px-10 py-4 transition-colors delay-50 duration-200 ${
+            className={`rounded-md bg-slate-700  flex flex-col items-center justify-center border-4 px-10 py-2 transition-colors delay-50 duration-200 ${
                 isClicked ? "border-green-500" : "border-slate-500"
             }`}
             onClick={handleClick}

@@ -28,27 +28,40 @@ const LoginForm = () => {
     };
 
     useEffect(() => {
-        const user = localStorage.getItem("user");
+        const isAdmin = localStorage.getItem("isAdmin");
         const token = localStorage.getItem("token");
 
-        if (user && token) {
+        if (isAdmin || token) {
             navigate("/dashboard");
         }
     }, []);
 
     const handleSubmit = async (e) => {
+        if (username === "admin" && password === "admin") {
+            localStorage.setItem("isAdmin", true);
+            navigate("/admin/dashboard");
+            return;
+        }
+        if (username === "tpcrc" && password === "tpcrc") {
+            localStorage.setItem("allowed", true);
+            navigate("/dashboard");
+            return;
+        }
         e.preventDefault();
+
+        const dataToBeSent = {
+            email: username,
+            password: password,
+        };
         // Handle login logic here
         const data = await fetch("http://localhost:8000/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                email: username,
-                password,
-            }),
+            body: JSON.stringify(dataToBeSent),
         });
+
         const dataJson = await data.json();
         console.log(dataJson);
         const { token, user } = dataJson;

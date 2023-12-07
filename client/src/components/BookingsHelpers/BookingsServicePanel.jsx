@@ -1,9 +1,27 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import userContext from "../../context/UserContext";
 
 export default function BookingsServicePanel() {
+    const { user, setUser } = useContext(userContext);
+
     const [feedback, setFeedback] = useState("");
 
-    const feedbackSubmitHandler = () => {};
+    const [feedStatus, setFeedStatus] = useState(false);
+
+    const feedbackSubmitHandler = async (event) => {
+        const res = await fetch("http://localhost:8000/api/booking/feedback", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                data: feedback,
+                roomNo: "102",
+                token: localStorage.getItem("token"),
+            }),
+        });
+    };
+
     const cancelBookingHandler = () => {};
 
     return (
@@ -43,6 +61,11 @@ export default function BookingsServicePanel() {
                 >
                     Submit Feedback
                 </button>
+                {feedStatus && (
+                    <p className={`text-xl text-green-400`}>
+                        Feedback sent successfully
+                    </p>
+                )}
             </div>
             <button
                 className={`text-sm text-white font-semibold text-center h-12 bg-red-600 w-full rounded-lg hover:bg-red-500  hover:cursor-pointer `}
