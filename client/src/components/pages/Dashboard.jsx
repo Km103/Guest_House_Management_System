@@ -91,6 +91,7 @@ export default function Dashboard() {
 
     const handleLogout = (event) => {
         localStorage.removeItem("token");
+        localStorage.removeItem("isAdmin");
         navigate("/auth/login");
     };
 
@@ -109,15 +110,18 @@ export default function Dashboard() {
 
         console.log(dataToBeSent);
 
-        const res = await fetch("http://localhost:8000/api/booking", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dataToBeSent),
-        });
-        const data = await res.json();
+        const res = await fetch(
+            "https://guesthouse-t9xd.onrender.com/api/booking",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToBeSent),
+            }
+        );
         navigate("/paymentack");
+        const data = await res.json();
     };
 
     let selectedRoomComponent = (

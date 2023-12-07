@@ -50,7 +50,7 @@ const RelativeRegistrations = () => {
         // event.preventDefault();
         // Perform registration logic here
         const res = await fetch(
-            "http://localhost:8000/api/register/user/student/",
+            "https://guesthouse-t9xd.onrender.com/api/register/user/student/",
             {
                 method: "POST",
                 headers: {

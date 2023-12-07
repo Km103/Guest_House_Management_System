@@ -32,7 +32,7 @@ export default function AdminDashboard() {
         if (!isAdmin) {
             navigate("/auth/login");
         }
-        fetch("http://localhost:8000/api/admin/feedback", {
+        fetch("https://guesthouse-t9xd.onrender.com/api/admin/feedback", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
             .catch((err) => {
                 console.log(err);
             });
-        fetch("http://localhost:8000/api/booking/getAll", {
+        fetch("https://guesthouse-t9xd.onrender.com/api/booking/getAll", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -83,6 +83,8 @@ export default function AdminDashboard() {
 
     const handleLogout = (event) => {
         localStorage.removeItem("token");
+        localStorage.removeItem("isAdmin");
+
         navigate("/auth/login");
     };
 
@@ -109,7 +111,18 @@ export default function AdminDashboard() {
     // details changing handler
     const roomDeleteHandler = () => {};
 
-    const editDetailsHandler = () => {};
+    const editDetailsHandler = async (event) => {
+        const res = await fetch([
+            "https://guesthouse-t9xd.onrender.com/api/room/price",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    roomNumber: selectedRoom.room.roomTitle,
+                    price: changedPrice,
+                }),
+            },
+        ]);
+    };
 
     // to enable edit button
     const editButtonEnable = changedPrice > 0;
@@ -170,7 +183,6 @@ export default function AdminDashboard() {
                     </div>
                     <div className=''>
                         <Link
-                            to='/paymentack'
                             className={`text-xl text-white font-semibold text-center h-12 bg-green-600 flex items-center w-full rounded-lg justify-center   hover:cursor-pointer 
                         ${
                             editButtonEnable

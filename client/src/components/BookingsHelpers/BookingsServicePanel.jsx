@@ -9,17 +9,20 @@ export default function BookingsServicePanel() {
     const [feedStatus, setFeedStatus] = useState(false);
 
     const feedbackSubmitHandler = async (event) => {
-        const res = await fetch("http://localhost:8000/api/booking/feedback", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                data: feedback,
-                roomNo: "102",
-                token: localStorage.getItem("token"),
-            }),
-        });
+        const res = await fetch(
+            "https://guesthouse-t9xd.onrender.com/api/booking/feedback",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    data: feedback,
+                    roomNo: "102",
+                    token: localStorage.getItem("token"),
+                }),
+            }
+        );
     };
 
     const cancelBookingHandler = () => {};

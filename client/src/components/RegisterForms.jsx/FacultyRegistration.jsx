@@ -26,6 +26,9 @@ const FacultyRegistration = () => {
     const userNameRegex = /^[a-z0-9]{4,10}$/i;
     const userNameRegexMatch = username.match(userNameRegex);
 
+    const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)?$/i;
+    const facultyNameRegexMatch = guestName.match(nameRegex);
+
     const passwordRegex =
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i;
     const passwordRegexMatch = password.match(passwordRegex);
@@ -42,7 +45,7 @@ const FacultyRegistration = () => {
         event.preventDefault();
         // Perform registration logic here
         const res = await fetch(
-            "http://localhost:8000/api/register/user/faculty/",
+            "https://guesthouse-t9xd.onrender.com/api/register/user/faculty/",
             {
                 method: "POST",
                 headers: {
@@ -94,6 +97,13 @@ const FacultyRegistration = () => {
                     {facultyEmail.length && !facultyEmailRegexMatch ? (
                         <div className={`text-red-500 mb-2`}>
                             Not a valid LNMIIT email
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {facultyName.length && !facultyNameRegexMatch ? (
+                        <div className={`text-red-500 mb-2`}>
+                            Faculty name should not
                         </div>
                     ) : (
                         <></>

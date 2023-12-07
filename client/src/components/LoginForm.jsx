@@ -54,13 +54,16 @@ const LoginForm = () => {
             password: password,
         };
         // Handle login logic here
-        const data = await fetch("http://localhost:8000/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dataToBeSent),
-        });
+        const data = await fetch(
+            "https://guesthouse-t9xd.onrender.com/api/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToBeSent),
+            }
+        );
 
         const dataJson = await data.json();
         console.log(dataJson);
