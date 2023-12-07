@@ -1,6 +1,5 @@
 const facultyData = require("../models/faculty");
 const studentData = require("../models/student");
-const tprcData = require("../models/tprc");
 const bcrypt = require("bcrypt");
 const { createSecretToken } = require("../util/SecretToken");
 const saltRounds = 12;
@@ -8,10 +7,19 @@ const saltRounds = 12;
 const login = async (req, res) => {
     try {
         const emailid = req.body.email;
+
+        if(emailid ==="tprc"){
+            if(password==="tprc"){
+                return res.status(200).json({msg:"TPRC login successfull"});
+            }
+            else{
+                return res.status(403).json({msg:"Incorrect Password"});
+            }
+        }
+
         const facultyuser = await facultyData.findOne({ email: emailid });
         const studentuser = await studentData.findOne({ email: emailid });
-        const tprcuser = await tprcData.findOne({ email: emailid });
-        if (!(studentuser || facultyuser || tprcuser)) {
+        if (!(studentuser || facultyuser)) {
             return res.status(404).json({ msg: "User Not Found" });
         }
         const pass = req.body.password;
@@ -24,10 +32,6 @@ const login = async (req, res) => {
         if (facultyuser) {
             user = facultyuser;
             token = createSecretToken(facultyuser._id);
-        }
-        if (tprcuser) {
-            user = tprcuser;
-            token = createSecretToken(tprcuser._id);
         }
         const hash = user.password;
         bcrypt.compare(pass, hash).then(function (result) {
